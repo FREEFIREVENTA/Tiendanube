@@ -9,12 +9,12 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet"/>
 <style>
-  body { font-family:'Poppins', sans-serif; background:#f9fafc; color:#333; }
+  body { font-family:'Poppins', sans-serif; background:#f9fafc; color:#333; margin:0; }
   header { background:linear-gradient(90deg,#ff6600,#ff3300); color:#fff; text-align:center; padding:60px 20px; }
   header h1 { font-weight:800; font-size:2.5rem; }
   header p { font-size:1.1rem; margin-top:10px; }
   .card { border:none; border-radius:16px; box-shadow:0 6px 20px rgba(0,0,0,0.08); }
-  footer { background:#111; color:#bbb; text-align:center; padding:20px; margin-top:20px; font-size:.9rem; }
+  footer { background:#111; color:#bbb; text-align:center; padding:20px; font-size:.9rem; }
   .secure-msg { font-size:.9rem; color:#28a745; font-weight:600; margin-top:10px; }
   .whatsapp-section {
     background: linear-gradient(90deg,#e6fff2,#d9ffea);
@@ -57,15 +57,17 @@
   .loading-dot:nth-child(2) { animation-delay: 0.2s; }
   .loading-dot:nth-child(3) { animation-delay: 0.4s; }
   @keyframes bounce { 0%, 80%, 100% { transform: scale(0);} 40% { transform: scale(1);} }
-  .payment-logos {
-    margin-top:30px;
+
+  .payment-logos-footer {
+    background:#000; 
     text-align:center;
+    padding:0;
+    margin:0;
   }
-  .payment-logos img {
-    max-width:100%;
+  .payment-logos-footer img {
+    display:block;
+    width:100%;
     height:auto;
-    border-radius:8px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.15);
   }
 </style>
 
@@ -137,12 +139,6 @@
     <div id="infoAfter" class="mt-3 text-muted small">
       <p><strong>Importante:</strong> El número debe contener 10 dígitos después del +54 (por ej: 91112345678). El DNI debe tener 8 dígitos (formato 00.000.000).</p>
     </div>
-
-    <!-- Payment logos section -->
-    <div class="payment-logos">
-      <img src="tiendanube.jpg" alt="Medios de pago">
-    </div>
-
   </div>
 </div>
 
@@ -150,6 +146,11 @@
   <p>Contacto: tuemail@ejemplo.com | WhatsApp: +54 0000000000</p>
   <p>&copy; 2025 Venta Free Fire | Compra segura garantizada</p>
 </footer>
+
+<!-- Full-width payment logos at bottom -->
+<div class="payment-logos-footer">
+  <img src="tiendanube.jpg" alt="Medios de pago">
+</div>
 
 <script>
 // Auto-insert "/" in vencimiento field (MM/AA)
